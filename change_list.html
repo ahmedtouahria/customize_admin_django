@@ -1,0 +1,153 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+<!-- Override extrahead to add Chart.js -->
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('myChart').getContext('2d');
+
+  // Sample data
+  const chartData = {{ chart_data | safe }};
+
+  // Parse the dates to JS
+  chartData.forEach((d) => {
+    d.x = new Date(d.date);
+  });
+
+  // Render the chart
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: 'new user',
+          data: chartData,
+          backgroundColor: '#90E0EF',
+          fill:false,
+          borderColor: 'rgb(75, 192, 192)',
+
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        xAxes: [
+          {
+            type: 'time',
+            time: {
+              unit: 'day',
+              round: 'day',
+              displayFormats: {
+                day: 'MMM D',
+              },
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    },
+  });
+});
+document.addEventListener('DOMContentLoaded', () => {
+
+  var pieChart = document.getElementById('visitors-chart').getContext('2d')
+  var myPieChart = new Chart(pieChart, {
+    type: 'pie',
+    data: {
+      datasets: [{
+        data: [{{partners_count}},{{count_users}}],
+        backgroundColor :["#139487","#86C6F4"],
+        borderWidth: 2,
+        
+      }],
+      labels: ['Partners = {{partners_count}}', 'Normal = {{count_users}}'] 
+    },
+    options : {
+      responsive: true, 
+      maintainAspectRatio: false,
+      legend: {
+        position : 'left',
+        labels : {
+          fontColor: 'grey',
+          fontSize: 15,
+        //  usePointStyle : true,
+          padding:25
+        }
+      },
+      pieceLabel: {
+        render: 'percentage',
+        fontColor: 'white',
+        fontSize: 14,
+      },
+
+
+    }
+  })
+  });
+
+document.addEventListener('DOMContentLoaded', () => {
+  var pieChart = document.getElementById('countryChart').getContext('2d')
+  var myPieChart = new Chart(pieChart, {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [{{user_qatar}},{{user_ksa}},{{user_emarate}},{{user_kwait}},{{user_others}}],
+        backgroundColor :["#4C0027","#1C7947","#CDF2CA","#FFE1AF","#C8C6C6"],
+        borderWidth: 1,
+        
+      }],
+      labels: ['Qatar', 'Saudi Ar','Emarate','kwait','Other'] 
+    },
+    options : {
+      responsive: true, 
+      maintainAspectRatio: false,
+      legend: {
+        position : 'left',
+        labels : {
+          fontColor: 'grey',
+          fontSize: 15,
+        //  usePointStyle : true,
+          padding:25
+        }
+      },
+      pieceLabel: {
+        render: 'percentage',
+        fontColor: 'white',
+        fontSize: 14,
+      },
+
+
+    }
+  })
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if user.is_admin %}
+<!-- Render our chart -->
+<h3>Global Statistics</h3>
+<div style="width: 50%;display:flex">
+  <canvas style="margin-bottom: 30px" id="myChart"></canvas>
+  <canvas style="margin-bottom:25px;width:50% " id="visitors-chart"></canvas>
+</div>
+<h3>Country</h3>
+
+<div style="width: 50%;display:flex">
+  <canvas style="margin-bottom: 30px" id="countryChart"></canvas>
+</div>
+{% endif %}
+<!-- Render the rest of the ChangeList view -->
+{{ block.super }}
+{% endblock %}
