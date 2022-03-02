@@ -6,6 +6,7 @@
 {{ block.super }}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const ctx = document.getElementById('myChart').getContext('2d');
@@ -24,12 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     data: {
       datasets: [
         {
-          label: 'new user',
+          label: 'new subscribe',
           data: chartData,
-          backgroundColor: '#90E0EF',
+          backgroundColor: '#F14A16',
           fill:false,
-          borderColor: 'rgb(75, 192, 192)',
-
+          borderColor: '#F14A16',
         },
       ],
     },
@@ -61,17 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 document.addEventListener('DOMContentLoaded', () => {
 
-  var pieChart = document.getElementById('visitors-chart').getContext('2d')
+  var pieChart = document.getElementById('subscribe_type').getContext('2d')
   var myPieChart = new Chart(pieChart, {
     type: 'pie',
     data: {
       datasets: [{
-        data: [{{partners_count}},{{count_users}}],
-        backgroundColor :["#139487","#86C6F4"],
-        borderWidth: 2,
+        data: [{{subscribe_89_count}},{{subscribe_130_count}},{{subscribe_220_count}}],
+        backgroundColor :["#FFB2A6","#FFF89A","#9ADCFF"],
+        borderWidth: 5,
         
       }],
-      labels: ['Partners = {{partners_count}}', 'Normal = {{count_users}}'] 
+      labels: ['Subscribe Type 89', 'Subscribe Type 130','Subscribe Type 220'] 
     },
     options : {
       responsive: true, 
@@ -87,43 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       pieceLabel: {
         render: 'percentage',
-        fontColor: 'white',
-        fontSize: 14,
-      },
-
-
-    }
-  })
-  });
-
-document.addEventListener('DOMContentLoaded', () => {
-  var pieChart = document.getElementById('countryChart').getContext('2d')
-  var myPieChart = new Chart(pieChart, {
-    type: 'doughnut',
-    data: {
-      datasets: [{
-        data: [{{user_qatar}},{{user_ksa}},{{user_emarate}},{{user_kwait}},{{user_others}}],
-        backgroundColor :["#4C0027","#1C7947","#CDF2CA","#FFE1AF","#C8C6C6"],
-        borderWidth: 1,
-        
-      }],
-      labels: ['Qatar', 'Saudi Ar','Emarate','kwait','Other'] 
-    },
-    options : {
-      responsive: true, 
-      maintainAspectRatio: false,
-      legend: {
-        position : 'left',
-        labels : {
-          fontColor: 'grey',
-          fontSize: 15,
-        //  usePointStyle : true,
-          padding:25
-        }
-      },
-      pieceLabel: {
-        render: 'percentage',
-        fontColor: 'white',
+        fontColor: '#FF8AAE',
         fontSize: 14,
       },
 
@@ -135,19 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
 {% endblock %}
 
 {% block content %}
-{% if user.is_admin %}
 <!-- Render our chart -->
-<h3>Global Statistics</h3>
-<div style="width: 50%;display:flex">
-  <canvas style="margin-bottom: 30px" id="myChart"></canvas>
-  <canvas style="margin-bottom:25px;width:50% " id="visitors-chart"></canvas>
+<div >
+  <canvas style="margin-bottom: 30px; width: 60%; height: 50%;" id="myChart"></canvas>
 </div>
-<h3>Country</h3>
+<div>
+  <canvas style="margin-bottom: 30px;height:270px !important" id="subscribe_type"></canvas>
 
-<div style="width: 50%;display:flex">
-  <canvas style="margin-bottom: 30px" id="countryChart"></canvas>
 </div>
-{% endif %}
 <!-- Render the rest of the ChangeList view -->
 {{ block.super }}
 {% endblock %}
